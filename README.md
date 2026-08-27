@@ -62,12 +62,26 @@ workspace.
 
 ### 5. Deploy (Vercel)
 
-1. Importe o repositório na Vercel e conecte a integração nativa **Neon** (ela pode preencher
-   `DATABASE_URL` automaticamente).
-2. Configure as demais variáveis de ambiente do item 2 no projeto da Vercel.
-3. O `vercel.json` já declara o cron job de disparo de campanhas (a cada 5 minutos). Cron jobs
-   frequentes exigem plano Pro da Vercel — no Hobby, ajuste a expressão em `vercel.json` conforme
-   os limites da sua conta.
+O projeto já está criado e linkado ao repositório na Vercel (`disparadorwp`, deploy automático a
+cada push na branch padrão). Falta apenas:
+
+1. Na aba **Storage** do projeto, conecte a integração nativa **Neon** (ela pode preencher
+   `DATABASE_URL` automaticamente) — ou aponte para o mesmo projeto Neon do item 1.
+2. Configure as demais variáveis de ambiente do item 2 em **Settings > Environment Variables**.
+3. Faça um novo deploy (ou um push vazio) depois de configurar as variáveis, já que o primeiro
+   deploy só tem o build passando de verdade quando `DATABASE_URL`, `NEON_AUTH_*` e
+   `CONNECTION_SECRET_KEY` existem no ambiente da Vercel.
+
+**Sobre o cron de disparo — importante no plano Hobby**: a conta da Vercel usada está no plano
+**Hobby**, que permite no máximo **1 execução de cron por dia** (o disparo em `*/5 * * * *` foi
+rejeitado no deploy com `cron_jobs_limits_reached`). O `vercel.json` está com `"0 12 * * *"`
+(uma vez por dia, 12h UTC) só para o deploy funcionar — isso não é suficiente para agendar
+campanhas em horário específico. Para ter precisão de minutos sem pagar Pro, chame
+`/api/cron/dispatch-campaigns` a partir de um agendador externo (GitHub Actions com `schedule`,
+cron-job.org, Upstash QStash, etc.) a cada poucos minutos, enviando o header
+`Authorization: Bearer <CRON_SECRET>` — a rota não depende do Vercel Cron especificamente, só
+precisa ser chamada por HTTPS com esse header. A alternativa mais simples é fazer upgrade do
+time para o plano **Pro**, que libera cron por minuto nativamente.
 
 ### 6. Conectar o WhatsApp (plugin NotificaMe)
 
