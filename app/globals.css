@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  background-color: var(--color-slate-50);
+  color: var(--color-slate-900);
+}
+
+::selection {
+  background-color: var(--color-emerald-200);
+}
+
+dialog::backdrop {
+  background-color: rgb(15 23 42 / 0.45);
+}
+
+dialog {
+  margin: auto;
+  padding: 0;
+  border: none;
+  background: transparent;
+  max-height: 90vh;
+}
