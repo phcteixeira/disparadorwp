@@ -3,6 +3,10 @@ import { Sidebar } from "@/components/workspace/sidebar";
 import { Topbar } from "@/components/workspace/topbar";
 import { listMyWorkspaces, requireWorkspaceMember } from "@/lib/workspace/auth";
 
+// Depende de sessão/cookies em toda requisição — aplica-se a todas as páginas aninhadas em
+// /w/[workspace]/**, que nunca devem ser pré-renderizadas no build.
+export const dynamic = "force-dynamic";
+
 export default async function WorkspaceLayout({
   children,
   params,

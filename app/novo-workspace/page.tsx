@@ -3,6 +3,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { CreateWorkspaceForm } from "@/components/workspace/create-workspace-form";
 import { listMyWorkspaces, requireSession } from "@/lib/workspace/auth";
 
+// Depende de sessão/cookies em toda requisição — nunca deve ser pré-renderizada no build.
+export const dynamic = "force-dynamic";
+
 export default async function NovoWorkspacePage() {
   await requireSession();
   const workspaces = await listMyWorkspaces();
